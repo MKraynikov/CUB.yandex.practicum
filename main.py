@@ -2,92 +2,13 @@
 # Training project,  yandex.practicum, group-18
 # Python v.1.0 2022-09-09
 
-from faker import Faker
-from tabulate import tabulate
-from random import randrange
-import random
 import json
-
-fake = Faker('ru_RU')
-
-#TODO Перенести заполняемые переменные в начало программы
-
-def init_data_sets():
-    #Генерируем список пользователей
-    #TODO добавить параметр для выбора количества генерируемых пользователей
-    fake_users = {}
-
-    for i in range(10):
-        fake_users[i] = {
-            'id': i + 1,
-            'name': fake.name(),
-            'city': fake.city(),
-            'address': fake.address(),
-            'job': fake.job(),
-            'email': fake.ascii_email(),
-            'age': randrange(21, 75),
-            'balance': random.uniform(0.0, 1000000)
-        }
-
-    return fake_users
+from modules.commands import *
+from modules.users import *
+from modules.data import *
 
 
-def print_exist_users(users):
-    # Выводим на экран список пользователей
-    # TODO добавить пароверку наличия ранее сгенерированных списков
-    table_headers = [
-        'ID', 'ФИО', 'Возраст', 'Город проживания'
-    ]
-    table_data = []
-    for i in users:
-        new_table_data = [
-            users[i]['id'],
-            users[i]['name'],
-            users[i]['age'],
-            users[i]['city']
-        ]
-        table_data.append(new_table_data)
-
-    print(tabulate(table_data, table_headers))
-
-
-def print_exist_user(user):
-    # Выводим на экран данные пользователя
-    # TODO добавить пароверку наличия ранее сгенерированного пользователя
-    table_headers = [
-        'Параметр', 'Значение'
-    ]
-
-    table_data = []
-    for k, v in user.items():
-        user_info = [k, v]
-        table_data.append(user_info)
-
-    print(tabulate(table_data, table_headers))
-
-
-def print_commands_list():
-    # Список комамнд
-    # TODO подумать как их расшиирять более гибко
-    table_headers = [
-        'Команда', 'Краткое описание', 'Функционал'
-    ]
-
-    table_data = [
-        ['exit', 'Выход', 'Завершение работы программы'],
-        ['mode', 'Режим работы', 'Смена режима работы с данными в программе'],
-        ['users', 'Пользователи', 'Вывод списка сгенерированных пользователей'],
-        ['show {user_id}', 'Показать пользователя', 'Загружает данные пользователя по его ID'],
-        ['store', 'Сохранить пользователей', 'Сохраняет текущий сгенерированный список пользователей в JSON'],
-        ['load', 'Загрузить пользователей', 'Загружает список пользователей из JSON файла'],
-    ]
-
-    print(tabulate(table_data, table_headers))
-
-
-def terminal_commands():
-    command = input('\nВведите команду: ')
-    return command
+# TODO Перенести заполняемые переменные в начало программы
 
 
 def operation():
@@ -117,11 +38,11 @@ def operation():
         input_command = terminal_commands().split(' ', 1)
         main_command = input_command[0]
 
-        #TODO Если выбран JSON не работает поиск по ID
+        # TODO Если выбран JSON не работает поиск по ID
         if main_command == 'show':
             print(f'Загружаем данные пользователя: {input_command[1]}')
             try:
-                print_exist_user(users_data[int(input_command[1])-1])
+                print_exist_user(users_data[int(input_command[1]) - 1])
             except:
                 print('Запрашиваемого пользователя нет в базе данных. Введите другой ID.')
 
@@ -158,5 +79,3 @@ def run_process():
 
 
 run_process()
-
-
